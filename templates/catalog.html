@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Catalog</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>Catalog</h1>
+        <h3>Keep track of your amazing entries</h3>
+        <table style="width:80%">
+            <tr>
+                <th>Entry</th>
+                <th>Date</th>
+            </tr>
+            {{ infotable }}
+        </table>
+        <form method="POST">
+            <input type="submit" value="New Entry" name="new_entry">
+        </form>
+    </body>
+</html>
