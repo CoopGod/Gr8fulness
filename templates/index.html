@@ -7,13 +7,14 @@
 </head>
 
 <body>
-    <div class="box">
-        <h1>What are you grateful for?</h1>
-        <h3>{{ message }}</h3>
+        
+    <div class="master-container">
+        <h1 class="title">What are you grateful for?</h1>
+        <h3 class="subtitle">{{ message }}</h3>
         <form action='' method="POST">
-            <input type="text" name="formUser" placeholder="username">
-            <input type="password" name="formPass" placeholder="password">
-            <input type="submit" value="Login" name="login">
+            <p><input class="input-text" type="text" name="formUser" placeholder="username"></p>
+            <p><input class="input-text" type="password" name="formPass" placeholder="password"></p>
+            <p><input class="submit" type="submit" value="Login" name="login"></p>
         </form>
     </div>
 </body>

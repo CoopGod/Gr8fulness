@@ -1,19 +1,86 @@
-body {
-  color: #202020;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+/* HEADER */
+.title,
+.subtitle {
+  text-align: center;
+  color: #f1dc16;
+  font-family: 'Nunito', sans-serif;
+  margin-bottom: 0;
+  margin-top: 0;
+  text-shadow: -1px 0 rgb(37, 37, 37), 0 1px rgb(37, 37, 37), 1px 0 rgb(37, 37, 37), 0 -1px rgb(37, 37, 37);
 }
 
-.box {
-  height: 80vh;
-  border: 1px black solid;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  font-size: 5vh;
+/* BODY */
+body {
+  background-color: #edf2f4;
+  font-family: 'Nunito', sans-serif;
+  color: #2b2d42;
+  font-size: 4vh;
 }
+
+.master-container
+{
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 25px;
+  border: solid #998f32 1px;
+  background-color: rgb(201, 196, 207);
+  border-radius: 10px;
+}
+
+
+.input-text {
+  font-size: 23px;
+  padding: 10px;
+}
+
+.submit {
+  width: fit-content;
+  border-radius: 10px;
+  background-color: #f1dc16;
+  color: rgb(255, 255, 255);
+  text-shadow: -1px 0 rgb(37, 37, 37), 0 1px rgb(37, 37, 37), 1px 0 rgb(37, 37, 37), 0 -1px rgb(37, 37, 37);
+  font-size: 3vh;
+}
+
+form {
+  text-align: center;
+  margin: auto;
+}
+
+/* TABLE */
+
+.tables {
+  text-align: center;
+  margin: auto;
+  border-collapse: collapse;
+  width: 95%;
+  font-size: 23px;
+}
+
+.tables td,
+.tables th {
+  border: 1px solid #342d3a;
+  padding: 8px;
+}
+
+.tables tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.tables tr:hover {
+  background-color: rgb(221, 221, 221);
+}
+
+.tables th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  font-size: 30px;
+  background-color: #c9af59;
+  color: white;
+}
+
+/* Base stlying for table from W3schools */
