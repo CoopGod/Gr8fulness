@@ -2,7 +2,7 @@
 .title,
 .subtitle {
   text-align: center;
-  color: #f1dc16;
+  color: #167cf1;
   font-family: 'Nunito', sans-serif;
   margin-bottom: 0;
   margin-top: 0;
@@ -11,7 +11,9 @@
 
 /* BODY */
 body {
-  background-color: #edf2f4;
+  background-image: url("media/mountain.jpg");
+  background-repeat: no-repeat;
+  width: 100%;
   font-family: 'Nunito', sans-serif;
   color: #2b2d42;
   font-size: 4vh;
@@ -25,21 +27,23 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 25px;
-  border: solid #998f32 1px;
-  background-color: rgb(201, 196, 207);
-  border-radius: 10px;
+  border: solid #323c99 2px;
+  background-color: rgba(254, 254, 255, 0.555);
+  border-radius: 40px;
 }
 
 
 .input-text {
   font-size: 23px;
   padding: 10px;
+  border-radius: 30px;
 }
 
 .submit {
+  padding: 10px 12px;
   width: fit-content;
   border-radius: 10px;
-  background-color: #f1dc16;
+  background-color: #1663f1;
   color: rgb(255, 255, 255);
   text-shadow: -1px 0 rgb(37, 37, 37), 0 1px rgb(37, 37, 37), 1px 0 rgb(37, 37, 37), 0 -1px rgb(37, 37, 37);
   font-size: 3vh;
