@@ -7,13 +7,13 @@
 </head>
 
 <body>
-    <div class="master-container">
+    <div>
         <h1 class="title">New Entry</h1>
         <h3 class="subtitle">What are you grateful for?</h3>
-        <form method="POST">
-            <input type="text" placeholder="Today I am grateful for..." name="formSubmission">
+        <form method="POST" id="form">
             <input type="submit">
         </form>
+        <textarea name="formSubmission" form="form" placeholder="Today I am grateful for..." rows="10"></textarea>
     </div>
 </body>
 

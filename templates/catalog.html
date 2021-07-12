@@ -8,16 +8,17 @@
 
 <body>
     <h1 class="title">Catalog</h1>
-    <h3 class="subtitle">Keep track of your amazing entries</h3>
+    <h3 class="subtitle">Keep track of your entries</h3>
     <table style="width:80%" class="tables">
-        <tr>
+        <tr class="tbl-header">
             <th>Entry</th>
             <th>Date</th>
         </tr>
         {{ infotable }}
     </table>
     <form method="POST">
-        <input type="submit" value="New Entry" name="new_entry">
+        <p><input type="submit" value="New Entry" name="new_entry"></p>
+        
     </form>
 
 </body>
