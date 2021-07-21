@@ -16,7 +16,7 @@ from werkzeug.utils import redirect
 app = Flask(__name__)
 app.secret_key = "oh_so_secret"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgres://wkplzdpcuvcdbp:a26cdeabd8551f1578d9be0e151c1afb88f469f315bf90bf5232073c49bdddcf@ec2-52-72-125-94.compute-1.amazonaws.com:5432/dfpu28ru0s3ujl'
+app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://wkplzdpcuvcdbp:a26cdeabd8551f1578d9be0e151c1afb88f469f315bf90bf5232073c49bdddcf@ec2-52-72-125-94.compute-1.amazonaws.com:5432/dfpu28ru0s3ujl'
 db = SQLAlchemy(app)
 
 #class defining user writings/entries 
@@ -58,11 +58,6 @@ def index():
             message = "Incorrect Username or Password!"
             return render_template("index.html", message=message)
     else:
-        user = 'Cooper'
-        passw = 'Cooper'
-        new_user = user(user, passw)
-        db.session.add(new_user)
-        db.session.commit()
         message = ""
         session['user'] = 'none'
         return render_template("index.html", message=message)
