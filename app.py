@@ -8,7 +8,7 @@ from flask import Flask, render_template, Markup, request, session
 from flask.helpers import total_seconds
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
-from sqlalchemy.orm import query
+from sqlalchemy.orm import column_property, query
 from sqlalchemy.sql.elements import Null
 from werkzeug.utils import redirect
 
@@ -58,6 +58,11 @@ def index():
             message = "Incorrect Username or Password!"
             return render_template("index.html", message=message)
     else:
+        user = 'Cooper'
+        passw = 'Cooper'
+        new_user = user(user, passw)
+        db.session.add(new_user)
+        db.session.commit()
         message = ""
         session['user'] = 'none'
         return render_template("index.html", message=message)
