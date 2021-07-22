@@ -90,7 +90,7 @@ def tableMarkup(user):
     userWritings = writings.query.order_by(desc(writings.ID)).filter_by(user = f"{user}")
     infotable = Markup("")
     for row in userWritings:
-        infotable = infotable + Markup(f"<tr class='tbl-content'><th>{row.index}</th><th>{row.date}</th></tr>")
+        infotable = infotable + Markup(f"<tr><td>{row.index}</td><td>{row.date}</td></tr>")
     return infotable
 
 # function to check username and password combinations. returns true if user is valid
