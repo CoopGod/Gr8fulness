@@ -40,8 +40,9 @@ h1 {
 /* Buttons */
 .signUpButton
 {
-    width: 39vmin;
-    height: 12vmin;
+    width: fit-content;
+    height: fit-content;
+    padding: 1vmin;
     font-size: 7vmin !important;
     margin: 4vmin;
     box-shadow: 5px 10px;
