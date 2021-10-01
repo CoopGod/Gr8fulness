@@ -7,7 +7,10 @@
 </head>
 
 <body>
-    <h1>Catalog</h1>
+    <h1 class="subheader">Catalog</h1>
+    <form method="POST">
+        <input type="submit" value="New Entry" name="new_entry" class="newEntryButton">
+    </form>
     <table>
         <tr>
             <th>Entry</th>
@@ -15,9 +18,7 @@
         </tr>
         {{ infotable }}
     </table>
-    <form method="POST">
-        <p><input type="submit" value="New Entry" name="new_entry"</p>
-    </form>
+
 
 </body>
 
