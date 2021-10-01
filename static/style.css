@@ -11,6 +11,12 @@ p
     font-size: 2vmin;
 }
 
+input
+{
+    font-size: 3vmin;
+    padding: 1vmin;
+}
+
 /* Title Image */
 img.headerImg {
     -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
