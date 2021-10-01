@@ -42,7 +42,7 @@ h1 {
 {
     width: 35vmin;
     height: 10vmin;
-    font-size: 7vmin;
+    font-size: 7vmin !important;
     margin: 4vmin;
     box-shadow: 5px 10px;
 }
