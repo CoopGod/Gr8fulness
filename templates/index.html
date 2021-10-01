@@ -4,19 +4,56 @@
 <head>
     <title>What are you grateful for?</title>
     <link rel="stylesheet" href="static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nova+Round&display=swap" rel="stylesheet">
 </head>
 
 <body>
-        
-    <div class="master-container">
-        <h1 class="title">What are you grateful for?</h1>
-        <h3 class="subtitle">{{ message }}</h3>
+    <!-- <div>
+        <h1>What are you grateful for?</h1>
+        <h3>{{ message }}</h3>
         <form action='' method="POST">
-            <p><input class="input-text" type="text" name="formUser" placeholder="username"></p>
-            <p><input class="input-text" type="password" name="formPass" placeholder="password"></p>
-            <p><input class="submit" type="submit" value="Login" name="login"></p>
+            <p><input type="text" name="formUser" placeholder="username"></p>
+            <p><input type="password" name="formPass" placeholder="password"></p>
+            <p><input type="submit" value="Login" name="login"></p>
         </form>
+    </div> -->
+    <div class="title">
+        <img src="/static/media/forest image.jpg" class="headerImg">
+        <h1 class="center">Why are you Grateful?</h1>
     </div>
+
+    <button class="signUpButton">SIGN UP</button>
+
+    <div class="mainGrid">
+        <div class="cellGrid">
+            <div><img src="/static/media/smiling-cafe-owner.jpg" class="grid"></div>
+            <div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur hendrerit pellentesque neque, ac
+                    tincidunt dui imperdiet id. Duis auctor quis erat sed maximus. Quisque mattis sem magna, quis
+                    malesuada turpis vehicula ultricies. Donec tincidunt tristique luctus. Suspendisse a fringilla
+                    lorem, ac aliquam urna. Donec imperdiet, arcu quis</p>
+            </div>
+        </div>
+        <div class="cellGrid">
+            <img src="/static/media/smiling people.jpg" class="grid">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur hendrerit pellentesque neque, ac
+                tincidunt dui imperdiet id. Duis auctor quis erat sed maximus. Quisque mattis sem magna, quis malesuada
+                turpis vehicula ultricies. Donec tincidunt tristique luctus. Suspendisse a fringilla lorem, ac aliquam
+                urna. Donec imperdiet, arcu quis</p>
+        </div>
+    </div>
+
+    <form action='' method="POST">
+        <button class="loginButton">LOGIN</button>
+        <div class="loginSpace">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="formUser">
+            <label for="password">Password:</label>
+            <input id="password" type="password" name="formPass">
+        </div>
+    </form>
 </body>
 
 </html>
