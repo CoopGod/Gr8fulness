@@ -10,21 +10,14 @@
 </head>
 
 <body>
-    <!-- <div>
-        <h1>What are you grateful for?</h1>
-        <h3>{{ message }}</h3>
-        <form action='' method="POST">
-            <p><input type="text" name="formUser" placeholder="username"></p>
-            <p><input type="password" name="formPass" placeholder="password"></p>
-            <p><input type="submit" value="Login" name="login"></p>
-        </form>
-    </div> -->
     <div class="title">
         <img src="/static/media/forest image.jpg" class="headerImg">
         <h1 class="center">Why are you Grateful?</h1>
     </div>
-
-    <button class="signUpButton">SIGN UP</button>
+    <form action="" method="POST">
+        <button class="signUpButton" name="button" value="signup">SIGN UP</button>
+    </form>
+    
 
     <div class="mainGrid">
         <div class="cellGrid">
@@ -46,7 +39,7 @@
     </div>
 
     <form action='' method="POST">
-        <button class="loginButton">LOGIN</button>
+        <button class="loginButton" name="button" value="login">LOGIN</button>
         <div class="loginSpace">
             <label for="username">Username:</label>
             <input type="text" id="username" name="formUser" style="margin-bottom: 1vmin;">

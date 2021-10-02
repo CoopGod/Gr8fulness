@@ -47,21 +47,27 @@ class users(db.Model):
 def index():
     # Validate username and password, continue if successful
     if flask.request.method == "POST":
-        username = request.values.get('formUser')
-        password = request.values.get('formPass')
-        validity = loginValidate(username, password)
-        print(validity)
-        if validity == True:
-            session['user'] = username
-            return redirect("/catalog")
+        if request.form['button'] == 'signup':
+            return redirect('/signup')
         else:
-            message = "Incorrect Username or Password!"
-            return render_template("index.html", message=message)
+            username = request.values.get('formUser')
+            password = request.values.get('formPass')
+            validity = loginValidate(username, password)
+            print(validity)
+            if validity == True:
+                session['user'] = username
+                return redirect("/catalog")
+            else:
+                message = "Incorrect Username or Password!"
+                return render_template("index.html", message=message)
     else:
         message = ""
         session['user'] = 'none'
         return render_template("index.html", message=message)
 
+@app.route("/signup", methods=['GET', 'POST'])
+def signup():
+    print('test')
 
 # Catalog page. See all your entries.
 @app.route("/catalog", methods=['GET','POST'])
