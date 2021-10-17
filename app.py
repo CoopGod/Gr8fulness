@@ -67,7 +67,19 @@ def index():
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
-    print('test')
+    error = ""
+    if flask.request.method == "POST":
+        username = request.values.get('formUser')
+        password = request.values.get("formPass")
+        new_user = makeUser(username, password)
+        if new_user != False:  
+            return redirect("/")
+        else:
+            error = "Username Already Taken!"
+    else:
+        return render_template("signup.html", error=error)
+
+
 
 # Catalog page. See all your entries.
 @app.route("/catalog", methods=['GET','POST'])
@@ -106,6 +118,17 @@ def loginValidate(usernameVal, passwordVal):
         if row.password == passwordVal:
             return True
     return False
+
+# function to check if username is already taken and if not, add it
+def makeUser(usernameVal, passwordVal):
+    allUsers = users.query.filter_by(username = usernameVal)
+    userCount = allUsers.count()
+    if userCount > 0:
+        return False
+    else:
+        new_user = users(usernameVal, passwordVal)
+        db.session.add(new_user)
+        db.session.commit()
 
 #funciton to create and submit row for SQL
 def logWriting(submission):
