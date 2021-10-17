@@ -76,10 +76,11 @@ def signup():
             return redirect("/")
         else:
             error = "Username Already Taken!"
+            return render_template("signup.html", error=error)
+
     else:
         return render_template("signup.html", error=error)
-
-
+        
 
 # Catalog page. See all your entries.
 @app.route("/catalog", methods=['GET','POST'])

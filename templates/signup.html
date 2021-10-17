@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <h1 class="subheader">Sign Up</h1>
+    <form method="POST">
+        <button class="loginButton" name="button" value="signup">SIGN UP</button>
+        <div class="loginSpace">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="formUser" style="margin-bottom: 1vmin;">
+            <br>
+            <label for="password">Password:</label>
+            <input id="password" type="password" name="formPass">
+        </div>
+    </form>
+    <p>{{ error }}</p>
+</body>
+
+</html>
