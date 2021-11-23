@@ -16,7 +16,7 @@ from werkzeug.utils import redirect
 app = Flask(__name__)
 app.secret_key = "oh_so_secret"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('DATABASE_URL')
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 
 #class defining user writings/entries 
