@@ -16,7 +16,7 @@ from werkzeug.utils import redirect
 app = Flask(__name__)
 app.secret_key = "oh_so_secret"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL") #'postgresql://wkplzdpcuvcdbp:a26cdeabd8551f1578d9be0e151c1afb88f469f315bf90bf5232073c49bdddcf@ec2-52-72-125-94.compute-1.amazonaws.com:5432/dfpu28ru0s3ujl'
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URLL") #'postgresql://wkplzdpcuvcdbp:a26cdeabd8551f1578d9be0e151c1afb88f469f315bf90bf5232073c49bdddcf@ec2-52-72-125-94.compute-1.amazonaws.com:5432/dfpu28ru0s3ujl'
 db = SQLAlchemy(app)
 
 
