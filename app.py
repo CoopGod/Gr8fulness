@@ -20,10 +20,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URL')
 db = SQLAlchemy(app)
 
-#class defining user writings/entries 
-
-print(os.environ['DATABASE_URL'])
-db = SQLAlchemy(app)
 
 #class defining user writings/entries 
 class writings(db.Model):
