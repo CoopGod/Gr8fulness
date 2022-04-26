@@ -16,21 +16,30 @@ from werkzeug.utils import redirect
 app = Flask(__name__)
 app.secret_key = "oh_so_secret"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URLL")
+app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://postgres:coopgod@localhost:5432/logs'
+#os.environ.get("DATABASE_URLL")
 db = SQLAlchemy(app)
 
 
 #class defining user writings/entries 
 class writings(db.Model):
     ID = db.Column(db.Integer, primary_key=True, nullable=False)
-    index = db.Column(db.String)
     date = db.Column(db.Date)
-    user = db.Column(db.String)
+    grateful1 = db.Column(db.String)
+    grateful2 = db.Column(db.String)
+    grateful3 = db.Column(db.String)
+    passage = db.Column(db.String)
+    tag = db.Column(db.String)
+    user_ID = db.Column(db.Integer)
 
-    def __init__(self, index, date, user):
-        self.index = index
+    def __init__(self, date, g1, g2, g3, passage, tag, userID):
         self.date = date
-        self.user = user
+        self.grateful1 = g1
+        self.grateful2 = g2
+        self.grateful3 = g3
+        self.passage = passage
+        self.tag = tag
+        self.user_ID = userID
 
 # class defining the user for login purposes
 class users(db.Model):
@@ -98,8 +107,12 @@ def catalog():
 @app.route("/new-entry", methods=["GET","POST"])
 def newEntry():
     if flask.request.method == "POST":
-        entry = request.values.get('formSubmission')
-        logWriting(entry)
+        g1 = request.values.get('g1')
+        g2 = request.values.get('g2')
+        g3 = request.values.get('g3')
+        passage = request.values.get('passage')
+        tag = request.values.get('tags')
+        logWriting(g1, g2, g3, passage, tag)
         return redirect('/catalog')
     else:
         return render_template('add.html')
@@ -107,10 +120,11 @@ def newEntry():
 # Helper functions --------------------------------------------------------------------------------------------------------------
 # function to create table markup for catalog page
 def tableMarkup(user):
-    userWritings = writings.query.order_by(desc(writings.ID)).filter_by(user = f"{user}")
+    userWritings = writings.query.order_by(desc(writings.ID)).filter_by(user_ID = f"{user}")
     infotable = Markup("")
     for row in userWritings:
-        infotable = infotable + Markup(f"<tr><td>{row.index}</td><td>{row.date}</td></tr>")
+        infotable = infotable + Markup(f"<tr><td>{row.grateful1}</td><td>{row.grateful2}</td> \
+            <td>{row.grateful3}</td><td>{row.passage}</td><td>{row.tag}</td><td>{row.date}</td></tr>")
     return infotable
 
 # function to check username and password combinations. returns true if user is valid
@@ -133,9 +147,9 @@ def makeUser(usernameVal, passwordVal):
         db.session.commit()
 
 #funciton to create and submit row for SQL
-def logWriting(submission):
+def logWriting(g1, g2, g3, passage, tag):
     todaysDate = date.today()
-    new_writing = writings(submission, todaysDate, session['user'])
+    new_writing = writings(todaysDate, g1, g2, g3, passage, tag, session['user'])
     db.session.add(new_writing)
     db.session.commit()
     
