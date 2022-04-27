@@ -128,6 +128,7 @@ def newEntry():
 def tableMarkup(user):
     userWritings = writings.query.order_by(desc(writings.ID)).filter_by(user_ID = f"{user}")
     infotable = Markup("")
+    ## TODO get info from favourites and see if favourited
     for row in userWritings:
         infotable = infotable + Markup(f"<tr><td>{row.grateful1}</td><td>{row.grateful2}</td> \
             <td>{row.grateful3}</td><td>{row.passage}</td><td>{row.tag}</td><td>{row.date}</td></tr> \
