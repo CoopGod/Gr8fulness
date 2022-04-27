@@ -1,15 +1,10 @@
 # imports ------ python -m flask run
-from datetime import datetime
-from logging import info
-import os
+from xxlimited import new
 import flask
 from datetime import date
 from flask import Flask, render_template, Markup, request, session
-from flask.helpers import total_seconds
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
-from sqlalchemy.orm import column_property, query
-from sqlalchemy.sql.elements import Null
 from werkzeug.utils import redirect
 
 # flask and postgres setup
@@ -51,7 +46,17 @@ class users(db.Model):
         self.username = username
         self.password = password
 
+# class defining users favorite entries
+class favorites(db.Model):
+    ID = db.Column(db.Integer, primary_key=True, nullable=False)
+    user_ID = db.Column(db.Integer)
+    log_ID = db.Column(db.Integer)
+
+    def __init__(self, userID, logID):
+        self.user_ID = userID
+        self.log_ID = logID
     
+
 # Home Page
 @app.route("/", methods=['GET','POST'])
 def index():
@@ -83,7 +88,8 @@ def signup():
         password = request.values.get("formPass")
         new_user = makeUser(username, password)
         if new_user != False:  
-            return redirect("/")
+            session['user'] = username
+            return redirect("/catalog")
         else:
             error = "Username Already Taken!"
             return render_template("signup.html", error=error)
@@ -96,7 +102,7 @@ def signup():
 @app.route("/catalog", methods=['GET','POST'])
 def catalog():
     if flask.request.method == "POST":
-        return redirect('/new-entry')
+        return redirect('/newEntry')
     else:
         # table markup function
         activeUser = session["user"]
@@ -104,7 +110,7 @@ def catalog():
         return render_template('catalog.html', infotable=infotable)
 
 # page to add entries
-@app.route("/new-entry", methods=["GET","POST"])
+@app.route("/newEntry", methods=["GET","POST"])
 def newEntry():
     if flask.request.method == "POST":
         g1 = request.values.get('g1')
@@ -124,7 +130,8 @@ def tableMarkup(user):
     infotable = Markup("")
     for row in userWritings:
         infotable = infotable + Markup(f"<tr><td>{row.grateful1}</td><td>{row.grateful2}</td> \
-            <td>{row.grateful3}</td><td>{row.passage}</td><td>{row.tag}</td><td>{row.date}</td></tr>")
+            <td>{row.grateful3}</td><td>{row.passage}</td><td>{row.tag}</td><td>{row.date}</td></tr> \
+                <td><button name={row.ID}>Fav</button></td>")
     return infotable
 
 # function to check username and password combinations. returns true if user is valid
@@ -151,6 +158,12 @@ def logWriting(g1, g2, g3, passage, tag):
     todaysDate = date.today()
     new_writing = writings(todaysDate, g1, g2, g3, passage, tag, session['user'])
     db.session.add(new_writing)
+    db.session.commit()
+
+# function to add favourite to list
+def addFavourite(logID, userID):
+    new_favourite = favorites(userID, logID)
+    db.session.add(new_favourite)
     db.session.commit()
     
 

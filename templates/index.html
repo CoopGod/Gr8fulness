@@ -3,51 +3,21 @@
 
 <head>
     <title>What are you grateful for?</title>
-    <link rel="stylesheet" href="static/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nova+Round&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div class="title">
-        <img src="/static/media/forest image.jpg" class="headerImg">
-        <h1 class="center" style="color: #ffffff">Why are you Grateful?</h1>
-    </div>
-    <form action="" method="POST">
-        <button class="signUpButton" name="button" value="signup">SIGN UP</button>
-    </form>
-    
-
-    <div class="mainGrid">
-        <div class="cellGrid">
-            <div><img src="/static/media/smiling-cafe-owner.jpg" class="grid"></div>
-            <div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur hendrerit pellentesque neque, ac
-                    tincidunt dui imperdiet id. Duis auctor quis erat sed maximus. Quisque mattis sem magna, quis
-                    malesuada turpis vehicula ultricies. Donec tincidunt tristique luctus. Suspendisse a fringilla
-                    lorem, ac aliquam urna. Donec imperdiet, arcu quis</p>
-            </div>
-        </div>
-        <div class="cellGrid">
-            <img src="/static/media/smiling people.jpg" class="grid">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur hendrerit pellentesque neque, ac
-                tincidunt dui imperdiet id. Duis auctor quis erat sed maximus. Quisque mattis sem magna, quis malesuada
-                turpis vehicula ultricies. Donec tincidunt tristique luctus. Suspendisse a fringilla lorem, ac aliquam
-                urna. Donec imperdiet, arcu quis</p>
-        </div>
-    </div>
-
     <form action='' method="POST">
-        <button class="loginButton" name="button" value="login">LOGIN</button>
-        <div class="loginSpace">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="formUser" style="margin-bottom: 1vmin;">
-            <br>
-            <label for="password">Password:</label>
-            <input id="password" type="password" name="formPass">
-        </div>
+        <button name="button" value="login">LOGIN</button>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="formUser" style="margin-bottom: 1vmin;">
+        <br>
+        <label for="password">Password:</label>
+        <input id="password" type="password" name="formPass">
     </form>
+    <form action="" method="POST">
+        <button name="button" value="signup">SIGN UP</button>
+    </form>
+    <p>{{message}}</p>
 </body>
 
 </html>
