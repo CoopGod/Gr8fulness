@@ -8,21 +8,20 @@
 <body>
     <h1>Catalog</h1>
     <form method="POST">
-        <input type="submit" value="New Entry" name="new_entry">
+        <input type="submit" value="newEntry" name="button">
+        <table>
+            <tr>
+                <th>Entry</th>
+                <th></th>
+                <th></th>
+                <th>Bible Passage</th>
+                <th>Tags</th>
+                <th>Date</th>
+                <th>Fav</th>
+            </tr>
+            {{ infotable }}
+        </table>
     </form>
-    <table>
-        <tr>
-            <th>Entry</th>
-            <th></th>
-            <th></th>
-            <th>Bible Passage</th>
-            <th>Tags</th>
-            <th>Date</th>
-            <th>Fav</th>
-        </tr>
-        {{ infotable }}
-    </table>
-
 
 </body>
 

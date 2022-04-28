@@ -1,5 +1,4 @@
 # imports ------ python -m flask run
-from xxlimited import new
 import flask
 from datetime import date
 from flask import Flask, render_template, Markup, request, session
@@ -102,7 +101,20 @@ def signup():
 @app.route("/catalog", methods=['GET','POST'])
 def catalog():
     if flask.request.method == "POST":
-        return redirect('/newEntry')
+        # if the new entry button is pressed
+        if request.form['button'] == 'newEntry':
+            return redirect('/newEntry')
+        # if one of the favorite buttons is pressed
+        else:
+            # check if is favorited. yes: remove. no: add
+            favoritesCount = favorites.query.filter_by(log_ID = int(request.form['button'])).count()
+            if favoritesCount > 0:
+                deleteFavourite(int(request.form['button']))
+                return redirect('/catalog')
+            else:
+                addFavourite(int(request.form['button']), session['user'])
+                return redirect('catalog')
+                
     else:
         # table markup function
         activeUser = session["user"]
@@ -126,13 +138,23 @@ def newEntry():
 # Helper functions --------------------------------------------------------------------------------------------------------------
 # function to create table markup for catalog page
 def tableMarkup(user):
-    userWritings = writings.query.order_by(desc(writings.ID)).filter_by(user_ID = f"{user}")
     infotable = Markup("")
-    ## TODO get info from favourites and see if favourited
+    # get info from favourites to then compare to ID's beig added to table
+    allFavorites = favorites.query.filter_by(user_ID = session['user'])
+    favoriteIDs = []
+    for row in allFavorites:
+        favoriteIDs.append(row.log_ID)
+        print(row.log_ID)
+    # create table to add to HTML
+    userWritings = writings.query.order_by(desc(writings.ID)).filter_by(user_ID = f"{user}")
     for row in userWritings:
+        if row.ID in favoriteIDs:
+            favoriteColor = '#FFFF00'
+        else:
+            favoriteColor = '#0000FF'
         infotable = infotable + Markup(f"<tr><td>{row.grateful1}</td><td>{row.grateful2}</td> \
             <td>{row.grateful3}</td><td>{row.passage}</td><td>{row.tag}</td><td>{row.date}</td></tr> \
-                <td><button name={row.ID}>Fav</button></td>")
+                <td><button name='button' value='{row.ID}' style='color: {favoriteColor};'>Fav</button></td>")
     return infotable
 
 # function to check username and password combinations. returns true if user is valid
@@ -165,6 +187,10 @@ def logWriting(g1, g2, g3, passage, tag):
 def addFavourite(logID, userID):
     new_favourite = favorites(userID, logID)
     db.session.add(new_favourite)
+    db.session.commit()
+
+def deleteFavourite(logID):
+    favorites.query.filter_by(log_ID = logID).delete()
     db.session.commit()
     
 
