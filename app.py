@@ -14,7 +14,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://postgres:coopgod@localhost
 #os.environ.get("DATABASE_URLL")
 db = SQLAlchemy(app)
 
-
 #class defining user writings/entries 
 class writings(db.Model):
     ID = db.Column(db.Integer, primary_key=True, nullable=False)
@@ -67,7 +66,6 @@ def index():
             username = request.values.get('formUser')
             password = request.values.get('formPass')
             validity = loginValidate(username, password)
-            print(validity)
             if validity == True:
                 session['user'] = username
                 return redirect("/catalog")
@@ -78,6 +76,7 @@ def index():
         message = ""
         session['user'] = 'none'
         return render_template("index.html", message=message)
+
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
@@ -102,59 +101,106 @@ def signup():
 def catalog():
     if flask.request.method == "POST":
         # if the new entry button is pressed
-        if request.form['button'] == 'newEntry':
+        if request.form['button'] == 'New Entry':
             return redirect('/newEntry')
+        # if the favorites button is pressed
+        elif request.form['button'] == "Favorites":
+            return redirect('/favorites')
         # if one of the favorite buttons is pressed
         else:
-            # check if is favorited. yes: remove. no: add
-            favoritesCount = favorites.query.filter_by(log_ID = int(request.form['button'])).count()
-            if favoritesCount > 0:
-                deleteFavourite(int(request.form['button']))
-                return redirect('/catalog')
+            entryID = int(request.form['button'][1:])
+            entryFunction = request.form['button'][0]
+            # if a favorite button was pressed:
+            if entryFunction == 'f':
+                # check if is favorited. yes: remove. no: add
+                favoritesCount = favorites.query.filter_by(log_ID = entryID).count()
+                if favoritesCount > 0:
+                    deleteFavourite(entryID)
+                    return redirect('/catalog')
+                else:
+                    addFavourite(entryID, session['user'])
+                    return redirect('catalog')
+            # if delete button was pressed
             else:
-                addFavourite(int(request.form['button']), session['user'])
-                return redirect('catalog')
-                
+                deleteWriting(entryID)
+                return redirect('/catalog')      
     else:
         # table markup function
         activeUser = session["user"]
         infotable = tableMarkup(activeUser)
         return render_template('catalog.html', infotable=infotable)
 
+
+# page to view saved favorites
+@app.route("/favorites", methods=["GET", "POST"])
+def favoritesPage():
+    if flask.request.method == "POST":
+        print("WIP")
+    else:
+        activeUser = session["user"]
+        infotable = favoriteMarkup(activeUser)
+        return render_template('favorites.html', infotable=infotable)
+
+
 # page to add entries
 @app.route("/newEntry", methods=["GET","POST"])
 def newEntry():
     if flask.request.method == "POST":
+        # get all values from form and add them to new writing
         g1 = request.values.get('g1')
         g2 = request.values.get('g2')
         g3 = request.values.get('g3')
         passage = request.values.get('passage')
         tag = request.values.get('tags')
         logWriting(g1, g2, g3, passage, tag)
+
         return redirect('/catalog')
     else:
         return render_template('add.html')
+
 
 # Helper functions --------------------------------------------------------------------------------------------------------------
 # function to create table markup for catalog page
 def tableMarkup(user):
     infotable = Markup("")
-    # get info from favourites to then compare to ID's beig added to table
+    # get info from favourites to then compare to ID's being added to table
     allFavorites = favorites.query.filter_by(user_ID = session['user'])
     favoriteIDs = []
     for row in allFavorites:
         favoriteIDs.append(row.log_ID)
-        print(row.log_ID)
     # create table to add to HTML
     userWritings = writings.query.order_by(desc(writings.ID)).filter_by(user_ID = f"{user}")
     for row in userWritings:
+        # colour for favorite indication
         if row.ID in favoriteIDs:
             favoriteColor = '#FFFF00'
         else:
             favoriteColor = '#0000FF'
+        # create markup for html injection
         infotable = infotable + Markup(f"<tr><td>{row.grateful1}</td><td>{row.grateful2}</td> \
-            <td>{row.grateful3}</td><td>{row.passage}</td><td>{row.tag}</td><td>{row.date}</td></tr> \
-                <td><button name='button' value='{row.ID}' style='color: {favoriteColor};'>Fav</button></td>")
+            <td>{row.grateful3}</td><td>{row.passage}</td><td>{row.tag}</td><td>{row.date}</td> \
+            <td><button name='button' value='f{row.ID}' style='color: {favoriteColor};'>Fav</button></td> \
+            <td><button name='button' value='d{row.ID}'>Delete</button></td></tr>")
+    return infotable
+
+
+# function to create table markup for favorites page
+def favoriteMarkup(user):
+    infotable = Markup("")
+    # get info from favourites to then compare to ID's being added to table
+    allFavorites = favorites.query.filter_by(user_ID = session['user'])
+    favoriteIDs = []
+    for row in allFavorites:
+        favoriteIDs.append(row.log_ID)
+    # create table to add to HTML
+    userWritings = writings.query.order_by(desc(writings.ID)).filter_by(user_ID = f"{user}")
+    for row in userWritings:
+        # colour for favorite indication
+        if row.ID in favoriteIDs:
+            # create markup for html injection
+            infotable = infotable + Markup(f"<tr><td>{row.grateful1}</td><td>{row.grateful2}</td> \
+                <td>{row.grateful3}</td><td>{row.passage}</td><td>{row.tag}</td><td>{row.date}</td> \
+                <td></tr>")
     return infotable
 
 # function to check username and password combinations. returns true if user is valid
@@ -164,6 +210,7 @@ def loginValidate(usernameVal, passwordVal):
         if row.password == passwordVal:
             return True
     return False
+
 
 # function to check if username is already taken and if not, add it
 def makeUser(usernameVal, passwordVal):
@@ -176,6 +223,7 @@ def makeUser(usernameVal, passwordVal):
         db.session.add(new_user)
         db.session.commit()
 
+
 #funciton to create and submit row for SQL
 def logWriting(g1, g2, g3, passage, tag):
     todaysDate = date.today()
@@ -183,11 +231,19 @@ def logWriting(g1, g2, g3, passage, tag):
     db.session.add(new_writing)
     db.session.commit()
 
+
+# function to delete log
+def deleteWriting(logID):
+    writings.query.filter_by(ID = logID).delete()
+    db.session.commit()
+
+
 # function to add favourite to list
 def addFavourite(logID, userID):
     new_favourite = favorites(userID, logID)
     db.session.add(new_favourite)
     db.session.commit()
+
 
 def deleteFavourite(logID):
     favorites.query.filter_by(log_ID = logID).delete()
