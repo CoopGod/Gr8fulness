@@ -11,10 +11,12 @@ app = Flask(__name__)
 app.secret_key = "oh_so_secret"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://postgres:coopgod@localhost:5432/logs'
-#os.environ.get("DATABASE_URLL")
+# os.environ.get("DATABASE_URLL")
 db = SQLAlchemy(app)
 
-#class defining user writings/entries 
+# class defining user writings/entries
+
+
 class writings(db.Model):
     ID = db.Column(db.Integer, primary_key=True, nullable=False)
     date = db.Column(db.Date)
@@ -35,6 +37,8 @@ class writings(db.Model):
         self.user_ID = userID
 
 # class defining the user for login purposes
+
+
 class users(db.Model):
     ID = db.Column(db.Integer, primary_key=True, nullable=False)
     username = db.Column(db.String)
@@ -45,6 +49,8 @@ class users(db.Model):
         self.password = password
 
 # class defining users favorite entries
+
+
 class favorites(db.Model):
     ID = db.Column(db.Integer, primary_key=True, nullable=False)
     user_ID = db.Column(db.Integer)
@@ -53,10 +59,10 @@ class favorites(db.Model):
     def __init__(self, userID, logID):
         self.user_ID = userID
         self.log_ID = logID
-    
+
 
 # Home Page
-@app.route("/", methods=['GET','POST'])
+@app.route("/", methods=['GET', 'POST'])
 def index():
     # Validate username and password, continue if successful
     if flask.request.method == "POST":
@@ -85,7 +91,7 @@ def signup():
         username = request.values.get('formUser')
         password = request.values.get("formPass")
         new_user = makeUser(username, password)
-        if new_user != False:  
+        if new_user != False:
             session['user'] = username
             return redirect("/catalog")
         else:
@@ -94,10 +100,10 @@ def signup():
 
     else:
         return render_template("signup.html", error=error)
-        
+
 
 # Catalog page. See all your entries.
-@app.route("/catalog", methods=['GET','POST'])
+@app.route("/catalog", methods=['GET', 'POST'])
 def catalog():
     if flask.request.method == "POST":
         # if the new entry button is pressed
@@ -113,7 +119,8 @@ def catalog():
             # if a favorite button was pressed:
             if entryFunction == 'f':
                 # check if is favorited. yes: remove. no: add
-                favoritesCount = favorites.query.filter_by(log_ID = entryID).count()
+                favoritesCount = favorites.query.filter_by(
+                    log_ID=entryID).count()
                 if favoritesCount > 0:
                     deleteFavourite(entryID)
                     return redirect('/catalog')
@@ -123,7 +130,7 @@ def catalog():
             # if delete button was pressed
             else:
                 deleteWriting(entryID)
-                return redirect('/catalog')      
+                return redirect('/catalog')
     else:
         # table markup function
         activeUser = session["user"]
@@ -143,7 +150,7 @@ def favoritesPage():
 
 
 # page to add entries
-@app.route("/newEntry", methods=["GET","POST"])
+@app.route("/newEntry", methods=["GET", "POST"])
 def newEntry():
     if flask.request.method == "POST":
         # get all values from form and add them to new writing
@@ -164,23 +171,23 @@ def newEntry():
 def tableMarkup(user):
     infotable = Markup("")
     # get info from favourites to then compare to ID's being added to table
-    allFavorites = favorites.query.filter_by(user_ID = session['user'])
+    allFavorites = favorites.query.filter_by(user_ID=session['user'])
     favoriteIDs = []
     for row in allFavorites:
         favoriteIDs.append(row.log_ID)
     # create table to add to HTML
-    userWritings = writings.query.order_by(desc(writings.ID)).filter_by(user_ID = f"{user}")
+    userWritings = writings.query.order_by(
+        desc(writings.ID)).filter_by(user_ID=f"{user}")
     for row in userWritings:
         # colour for favorite indication
+        favoriteClass = ''
         if row.ID in favoriteIDs:
-            favoriteColor = '#FFFF00'
-        else:
-            favoriteColor = '#0000FF'
+            favoriteClass = 'btn-warning'
         # create markup for html injection
         infotable = infotable + Markup(f"<tr><td>{row.grateful1}</td><td>{row.grateful2}</td> \
             <td>{row.grateful3}</td><td>{row.passage}</td><td>{row.tag}</td><td>{row.date}</td> \
-            <td><button name='button' value='f{row.ID}' style='color: {favoriteColor};'>Fav</button></td> \
-            <td><button name='button' value='d{row.ID}'>Delete</button></td></tr>")
+            <td><button class='btn {favoriteClass}' name='button' value='f{row.ID}' style='border: solid 1px grey;'>Favorite</button></td> \
+            <td><button class='btn btn-danger' name='button' value='d{row.ID}'>Delete</button></td></tr>")
     return infotable
 
 
@@ -188,12 +195,13 @@ def tableMarkup(user):
 def favoriteMarkup(user):
     infotable = Markup("")
     # get info from favourites to then compare to ID's being added to table
-    allFavorites = favorites.query.filter_by(user_ID = session['user'])
+    allFavorites = favorites.query.filter_by(user_ID=session['user'])
     favoriteIDs = []
     for row in allFavorites:
         favoriteIDs.append(row.log_ID)
     # create table to add to HTML
-    userWritings = writings.query.order_by(desc(writings.ID)).filter_by(user_ID = f"{user}")
+    userWritings = writings.query.order_by(
+        desc(writings.ID)).filter_by(user_ID=f"{user}")
     for row in userWritings:
         # colour for favorite indication
         if row.ID in favoriteIDs:
@@ -204,8 +212,10 @@ def favoriteMarkup(user):
     return infotable
 
 # function to check username and password combinations. returns true if user is valid
+
+
 def loginValidate(usernameVal, passwordVal):
-    allUsers = users.query.filter_by(username = usernameVal)
+    allUsers = users.query.filter_by(username=usernameVal)
     for row in allUsers:
         if row.password == passwordVal:
             return True
@@ -214,7 +224,7 @@ def loginValidate(usernameVal, passwordVal):
 
 # function to check if username is already taken and if not, add it
 def makeUser(usernameVal, passwordVal):
-    allUsers = users.query.filter_by(username = usernameVal)
+    allUsers = users.query.filter_by(username=usernameVal)
     userCount = allUsers.count()
     if userCount > 0:
         return False
@@ -224,17 +234,18 @@ def makeUser(usernameVal, passwordVal):
         db.session.commit()
 
 
-#funciton to create and submit row for SQL
+# funciton to create and submit row for SQL
 def logWriting(g1, g2, g3, passage, tag):
     todaysDate = date.today()
-    new_writing = writings(todaysDate, g1, g2, g3, passage, tag, session['user'])
+    new_writing = writings(todaysDate, g1, g2, g3,
+                           passage, tag, session['user'])
     db.session.add(new_writing)
     db.session.commit()
 
 
 # function to delete log
 def deleteWriting(logID):
-    writings.query.filter_by(ID = logID).delete()
+    writings.query.filter_by(ID=logID).delete()
     db.session.commit()
 
 
@@ -246,9 +257,9 @@ def addFavourite(logID, userID):
 
 
 def deleteFavourite(logID):
-    favorites.query.filter_by(log_ID = logID).delete()
+    favorites.query.filter_by(log_ID=logID).delete()
     db.session.commit()
-    
+
 
 # Run flask app --------------------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
