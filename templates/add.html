@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Catalog</title>
+    <title>New Entry</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -26,19 +26,42 @@
             </div>
         </div>
     </nav>
+
+    <!-- Content -->
     <div class="jumbotron" style="background-color: #f3f8fc; margin-bottom: 0;">
         <h1>New Entry</h1>
-        <p>gratitude can lower risks of heart disease, lower the severity of some symptoms of depression, instill
+        <p style="max-width: 50rem;">gratitude can lower risks of heart disease, lower the severity of some symptoms of
+            depression, instill
             healthier eating habits, and more. It takes less than a minute to write out what you're grateful for, and
             the benefits are positive and worthwhile.</p>
     </div>
-    <textarea name="g1" form="form" placeholder="I am grateful for..." rows="1"></textarea>
-    <textarea name="g2" form="form" placeholder="I am grateful for..." rows="1"></textarea>
-    <textarea name="g3" form="form" placeholder="I am grateful for..." rows="1"></textarea>
-    <form method="POST" id="form">
-        <input type="submit">
-        <input type="text" name="passage" placeholder="Genesis 1:1">
-        <input type="text" name="tags" placeholder="Special Occasion">
+
+    <!-- Form -->
+    <form method="POST" id="form" style="padding: 0 10rem; margin-top: 1rem;">
+        <div class="form-group">
+            <label for="grateful1">Gratefulness Logs</label>
+            <input type="text" class="form-control" id="grateful1" name="g1" placeholder="I am grateful for..."
+                style="margin-bottom: 10px;">
+            <input type="text" class="form-control" name="g2" placeholder="I am also grateful for..."
+                style="margin-bottom: 10px;">
+            <input type="text" class="form-control" name="g3" placeholder="and I am grateful for...">
+        </div>
+        <div class="form-group">
+            <label for="bible">Today's Bible Passage</label>
+            <input type="text" placeholder="Genesis 1:1" id="bible" name="passage" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="tags">Tag</label>
+            <select name="tags" id="tags" class="form-control">
+                <option value="Great Day">Great Day</option>
+                <option value="Great Day">Good Day</option>
+                <option value="Great Day">Meh Day</option>
+                <option value="Great Day">Tough Day</option>
+                <option value="Great Day">Sad Day</option>
+            </select>
+        </div>
+        <input type="submit" class="btn btn-primary">
+
     </form>
 </body>
 
