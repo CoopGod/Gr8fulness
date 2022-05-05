@@ -106,16 +106,19 @@ def signup():
 @app.route("/catalog", methods=['GET', 'POST'])
 def catalog():
     if flask.request.method == "POST":
+        buttonValue = request.form['button']
         # if the new entry button is pressed
-        if request.form['button'] == 'New Entry':
+        if buttonValue == 'New Entry':
             return redirect('/newEntry')
         # if the favorites button is pressed
-        elif request.form['button'] == "Favorites":
+        elif buttonValue == "Favorites":
             return redirect('/favorites')
+        elif buttonValue == "Catalog":
+            return redirect('/catalog')
         # if one of the favorite buttons is pressed
         else:
-            entryID = int(request.form['button'][1:])
-            entryFunction = request.form['button'][0]
+            entryID = int(buttonValue[1:])
+            entryFunction = buttonValue[0]
             # if a favorite button was pressed:
             if entryFunction == 'f':
                 # check if is favorited. yes: remove. no: add
@@ -142,7 +145,15 @@ def catalog():
 @app.route("/favorites", methods=["GET", "POST"])
 def favoritesPage():
     if flask.request.method == "POST":
-        print("WIP")
+        buttonValue = request.form['button']
+        # if the new entry button is pressed
+        if buttonValue == 'New Entry':
+            return redirect('/newEntry')
+        # if the favorites button is pressed
+        elif buttonValue == "Favorites":
+            return redirect('/favorites')
+        elif buttonValue == "Catalog":
+            return redirect('/catalog')
     else:
         activeUser = session["user"]
         infotable = favoriteMarkup(activeUser)
@@ -153,14 +164,23 @@ def favoritesPage():
 @app.route("/newEntry", methods=["GET", "POST"])
 def newEntry():
     if flask.request.method == "POST":
-        # get all values from form and add them to new writing
-        g1 = request.values.get('g1')
-        g2 = request.values.get('g2')
-        g3 = request.values.get('g3')
-        passage = request.values.get('passage')
-        tag = request.values.get('tags')
-        logWriting(g1, g2, g3, passage, tag)
-
+        buttonValue = request.form['button']
+        # if the new entry button is pressed
+        if buttonValue == 'New Entry':
+            return redirect('/newEntry')
+        # if the favorites button is pressed
+        elif buttonValue == "Favorites":
+            return redirect('/favorites')
+        elif buttonValue == "Catalog":
+            return redirect('/catalog')
+        else:
+            # get all values from form and add them to new writing
+            g1 = request.values.get('g1')
+            g2 = request.values.get('g2')
+            g3 = request.values.get('g3')
+            passage = request.values.get('passage')
+            tag = request.values.get('tags')
+            logWriting(g1, g2, g3, passage, tag)
         return redirect('/catalog')
     else:
         return render_template('add.html')
@@ -180,13 +200,17 @@ def tableMarkup(user):
         desc(writings.ID)).filter_by(user_ID=f"{user}")
     for row in userWritings:
         # colour for favorite indication
-        favoriteClass = ''
+        favoriteClass = 'btn-light'
         if row.ID in favoriteIDs:
             favoriteClass = 'btn-warning'
         # create markup for html injection
-        infotable = infotable + Markup(f"<tr><td>{row.grateful1}</td><td>{row.grateful2}</td> \
-            <td>{row.grateful3}</td><td>{row.passage}</td><td>{row.tag}</td><td>{row.date}</td> \
-            <td><button class='btn {favoriteClass}' name='button' value='f{row.ID}' style='border: solid 1px grey;'>Favorite</button></td> \
+        infotable = infotable + Markup(f"<tr><td>{row.grateful1}</td> \
+            <td>{row.grateful2}</td> \
+            <td>{row.grateful3}</td> \
+            <td>{row.passage}</td> \
+            <td>{row.tag}</td> \
+            <td>{row.date}</td> \
+            <td><button class='btn {favoriteClass}' name='button' value='f{row.ID}''>Favorite</button></td> \
             <td><button class='btn btn-danger' name='button' value='d{row.ID}'>Delete</button></td></tr>")
     return infotable
 
@@ -206,9 +230,12 @@ def favoriteMarkup(user):
         # colour for favorite indication
         if row.ID in favoriteIDs:
             # create markup for html injection
-            infotable = infotable + Markup(f"<tr><td>{row.grateful1}</td><td>{row.grateful2}</td> \
-                <td>{row.grateful3}</td><td>{row.passage}</td><td>{row.tag}</td><td>{row.date}</td> \
-                <td></tr>")
+            infotable = infotable + Markup(f"<tr><td>{row.grateful1}</td> \
+                <td>{row.grateful2}</td> \
+                <td>{row.grateful3}</td> \
+                <td>{row.passage}</td> \
+                <td>{row.tag}</td> \
+                <td>{row.date}</td></tr>")
     return infotable
 
 # function to check username and password combinations. returns true if user is valid
