@@ -29,10 +29,22 @@
         </div>
     </nav>
 
-    <!-- Login Form -->
+    <!-- Content -->
     <form method="POST">
-        <!-- <button name="button" value="login">LOGIN</button> -->
+        <div class="jumbotron" style="background-color: #f3f8fc;">
+            <h1>Gr8fulness</h1>
+            <p style="max-width: 50rem;">Gr8fulness is an application which seeks to make cataloging gratefulness easy
+                and private.
+                100% free. No ads. Just an
+                oppurtunity to find some joy. Gratitude can lower risks of heart disease, lower the severity of some
+                symptoms
+                of depression, instill healthier eating habits, and more.</p>
+            <p><input type="submit" value="Sign Up" name="button" class="btn btn-primary btn-lg"></p>
+        </div>
+
+        <!-- Login Form -->
         <div style="padding: 0 7rem">
+            <h1 class="display-5" style="padding: 1rem 0;">Login</h1>
             <div class="form-group">
                 <label for="username">Username</label>
                 <input class="form-control" type="text" id="username" name="formUser" style="margin-bottom: 1vmin;">
@@ -41,14 +53,11 @@
                 <label for="password">Password:</label>
                 <input class="form-control" id="password" type="password" name="formPass">
             </div>
-            <input type="button" class="btn btn-primary" value="Login" name="button">
+            <input type="submit" class="btn btn-dark" value="Login" name="button">
+            {{message}}
         </div>
-
     </form>
-    <form action="" method="POST">
-        <button name="button" value="signup">SIGN UP</button>
-    </form>
-    <p>{{message}}</p>
+    
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

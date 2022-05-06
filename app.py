@@ -11,7 +11,8 @@ from werkzeug.utils import redirect
 app = Flask(__name__)
 app.secret_key = "oh_so_secret"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URLL") #'postgresql://postgres:coopgod@localhost:5432/logs' 
+# os.environ.get("DATABASE_URLL")
+app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://postgres:coopgod@localhost:5432/logs'
 db = SQLAlchemy(app)
 
 # class defining user writings/entries
@@ -64,10 +65,12 @@ class favorites(db.Model):
 # Home Page
 @app.route("/", methods=['GET', 'POST'])
 def index():
-    # Validate username and password, continue if successful
+    message = ""
+    session['user'] = 'none'
     if flask.request.method == "POST":
-        if request.form['button'] == 'signup':
+        if request.form['button'] == 'Sign Up':
             return redirect('/signup')
+        # Validate username and password, continue if successful
         else:
             username = request.values.get('formUser')
             password = request.values.get('formPass')
@@ -76,11 +79,13 @@ def index():
                 session['user'] = username
                 return redirect("/catalog")
             else:
-                message = "Incorrect Username or Password!"
+                # show user danger message
+                message = Markup("<div class='alert alert-danger' style='margin-top: 2rem;'> \
+                    Incorrect username or password. Please try again and contact \
+                    the admin if the issue persists.</div> \
+                    ")
                 return render_template("index.html", message=message)
     else:
-        message = ""
-        session['user'] = 'none'
         return render_template("index.html", message=message)
 
 
@@ -95,7 +100,9 @@ def signup():
             session['user'] = username
             return redirect("/catalog")
         else:
-            error = "Username Already Taken!"
+            error = Markup("<div class='alert alert-danger' style='margin-top: 2rem;'> \
+                This username is already taken. Please select a different one.</div> \
+                ")
             return render_template("signup.html", error=error)
 
     else:
