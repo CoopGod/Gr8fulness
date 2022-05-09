@@ -142,10 +142,11 @@ def catalog():
                 deleteWriting(entryID)
                 return redirect('/catalog')
     else:
-        # table markup function
+        # gather markup and load page
         activeUser = session["user"]
         infotable = tableMarkup(activeUser)
-        return render_template('catalog.html', infotable=infotable)
+        modals = modalMarkup(activeUser, False)
+        return render_template('catalog.html', infotable=infotable, modals=modals)
 
 
 # page to view saved favorites
@@ -164,7 +165,8 @@ def favoritesPage():
     else:
         activeUser = session["user"]
         infotable = favoriteMarkup(activeUser)
-        return render_template('favorites.html', infotable=infotable)
+        modals = modalMarkup(activeUser, True)
+        return render_template('favorites.html', infotable=infotable, modals=modals)
 
 
 # page to add entries
@@ -211,18 +213,60 @@ def tableMarkup(user):
         if row.ID in favoriteIDs:
             favoriteClass = 'btn-warning'
         # create markup for html injection
-        infotable = infotable + Markup(f"<tr><td>{row.grateful1}</td> \
-            <td>{row.grateful2}</td> \
-            <td>{row.grateful3}</td> \
+        infotable = infotable + Markup(f"<tr><td><button type='button' class='btn btn-primary'  \
+                data-toggle='modal' data-target='#{row.ID}Modal'>View</button></td> \
             <td>{row.passage}</td> \
             <td>{row.tag}</td> \
             <td>{row.date}</td> \
-            <td><button class='btn {favoriteClass}' name='button' value='f{row.ID}''>Favorite</button></td> \
+            <td><button class='btn {favoriteClass}' name='button' value='f{row.ID}'>Favorite</button></td> \
             <td><button class='btn btn-danger' name='button' value='d{row.ID}'>Delete</button></td></tr>")
     return infotable
 
 
+# function to create modal for each data entry to add to html via jijna
+def modalMarkup(user, isFavorite):
+    modals = Markup("")
+    if isFavorite == True:
+        # get info from favourites to then compare to ID's being added to table
+        allFavorites = favorites.query.filter_by(user_ID=session['user'])
+        favoriteIDs = []
+        for row in allFavorites:
+            favoriteIDs.append(row.log_ID)
+        userWritings = writings.query.order_by(
+            desc(writings.ID)).filter_by(user_ID=f"{user}")
+    else:
+        userWritings = writings.query.order_by(
+            desc(writings.ID)).filter_by(user_ID=f"{user}")
+    for row in userWritings:
+        # create modal
+        modals += Markup(f'<div class="modal fade" id="{row.ID}Modal" tabindex="-1" role="dialog" \
+                aria-labelledby="{row.ID}ModalLabel" aria-hidden="true">\
+            <div class="modal-dialog" role="document">\
+                <div class="modal-content">\
+                <div class="modal-header">\
+                    <h5 class="modal-title" id="{row.ID}ModalLabel">Gr8fulness Log</h5>\
+                    <button type="button" class="close" data-d\miss="modal" aria-label="Close">\
+                    <span aria-hidden="true">&times;</span> \
+                    </button>\
+                </div>\
+                <div class="modal-body">\
+                    <ul> \
+                        <li>{row.grateful1}</li> \
+                        <li>{row.grateful2}</li> \
+                        <li>{row.grateful3}</li> \
+                    </ul>\
+                </div>\
+                <div class="modal-footer">\
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>\
+                </div>\
+                </div>\
+            </div>\
+            </div>')
+    return modals
+
 # function to create table markup for favorites page
+
+
 def favoriteMarkup(user):
     infotable = Markup("")
     # get info from favourites to then compare to ID's being added to table
@@ -237,9 +281,8 @@ def favoriteMarkup(user):
         # colour for favorite indication
         if row.ID in favoriteIDs:
             # create markup for html injection
-            infotable = infotable + Markup(f"<tr><td>{row.grateful1}</td> \
-                <td>{row.grateful2}</td> \
-                <td>{row.grateful3}</td> \
+            infotable = infotable + Markup(f"<tr><td><button type='button' class='btn btn-primary'  \
+                    data-toggle='modal' data-target='#{row.ID}Modal'>View</button></td> \
                 <td>{row.passage}</td> \
                 <td>{row.tag}</td> \
                 <td>{row.date}</td></tr>")
