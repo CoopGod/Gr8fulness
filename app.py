@@ -121,6 +121,30 @@ def catalog():
             return redirect('/favorites')
         elif buttonValue == "Catalog":
             return redirect('/catalog')
+        elif buttonValue == "sort-tag":
+            # gather markup and load page but SORTED BY TAG
+            activeUser = session["user"]
+            # if already sorted by tag, revert
+            if session['sort'] == 'tag':
+                session['sort'] = 'regular'
+                infotable = tableMarkup(activeUser, 'regular')
+            else:
+                session['sort'] = 'tag'
+                infotable = tableMarkup(activeUser, 'tag')
+            modals = modalMarkup(activeUser, False)
+            return render_template('catalog.html', infotable=infotable, modals=modals)
+        elif buttonValue == "sort-date":
+            # gather markup and load page but SORTED BY DATE
+            activeUser = session["user"]
+            # if already sorted by date, revert
+            if session['sort'] == 'date':
+                session['sort'] = 'regular'
+                infotable = tableMarkup(activeUser, 'regular')
+            else:
+                session['sort'] = 'date'
+                infotable = tableMarkup(activeUser, 'date')
+            modals = modalMarkup(activeUser, False)
+            return render_template('catalog.html', infotable=infotable, modals=modals)
         # if one of the favorite buttons is pressed
         else:
             entryID = int(buttonValue[1:])
@@ -141,9 +165,10 @@ def catalog():
                 deleteWriting(entryID)
                 return redirect('/catalog')
     else:
+        session['sort'] = 'regular'
         # gather markup and load page
         activeUser = session["user"]
-        infotable = tableMarkup(activeUser)
+        infotable = tableMarkup(activeUser, 'regular')
         modals = modalMarkup(activeUser, False)
         return render_template('catalog.html', infotable=infotable, modals=modals)
 
@@ -196,16 +221,24 @@ def newEntry():
 
 # Helper functions --------------------------------------------------------------------------------------------------------------
 # function to create table markup for catalog page
-def tableMarkup(user):
+def tableMarkup(user, sortBy):
     infotable = Markup("")
     # get info from favourites to then compare to ID's being added to table
-    allFavorites = favorites.query.filter_by(user_ID=session['user'])
+    allFavorites = favorites.query.filter_by(user_ID=f"{user}")
     favoriteIDs = []
     for row in allFavorites:
         favoriteIDs.append(row.log_ID)
+    # order by chosen value
+    if sortBy == 'regular':
+        userWritings = writings.query.order_by(
+            desc(writings.ID)).filter_by(user_ID=f"{user}")
+    elif sortBy == 'tag':
+        userWritings = writings.query.order_by(
+            writings.tag).filter_by(user_ID=f"{user}")
+    else:
+        userWritings = writings.query.order_by(
+            writings.ID).filter_by(user_ID=f"{user}")
     # create table to add to HTML
-    userWritings = writings.query.order_by(
-        desc(writings.ID)).filter_by(user_ID=f"{user}")
     for row in userWritings:
         # colour for favorite indication
         favoriteClass = 'btn-light'
@@ -312,6 +345,15 @@ def makeUser(usernameVal, passwordVal):
 
 # funciton to create and submit row for SQL
 def logWriting(g1, g2, g3, passage, tag):
+    # null handler cause nothing looks dumb
+    if g1 == "":
+        g1 = "Something cool, I'm sure"
+    if g2 == "":
+        g2 = "Something cool, I'm sure"
+    if g3 == "":
+        g3 = "Something cool, I'm sure"
+    if passage == "":
+        passage = "None Today"
     todaysDate = date.today()
     new_writing = writings(todaysDate, g1, g2, g3,
                            passage, tag, session['user'])
