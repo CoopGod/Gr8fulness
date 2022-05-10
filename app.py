@@ -11,7 +11,7 @@ from werkzeug.utils import redirect
 app = Flask(__name__)
 app.secret_key = "oh_so_secret"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URLL") #'postgresql://postgres:coopgod@localhost:5432/logs'
+app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://postgres:coopgod@localhost:5432/logs'# os.environ.get("DATABASE_URLL")
 db = SQLAlchemy(app)
 
 # class defining user writings/entries
