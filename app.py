@@ -53,7 +53,7 @@ class users(db.Model):
 
 class favorites(db.Model):
     ID = db.Column(db.Integer, primary_key=True, nullable=False)
-    user_ID = db.Column(db.Integer)
+    user_ID = db.Column(db.String)
     log_ID = db.Column(db.Integer)
 
     def __init__(self, userID, logID):
