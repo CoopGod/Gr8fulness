@@ -11,7 +11,8 @@ from werkzeug.utils import redirect
 app = Flask(__name__)
 app.secret_key = "oh_so_secret"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://postgres:coopgod@localhost:5432/logs'# os.environ.get("DATABASE_URLL")
+# os.environ.get("DATABASE_URLL")
+app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://postgres:coopgod@localhost:5432/logs'
 db = SQLAlchemy(app)
 
 # class defining user writings/entries
@@ -121,6 +122,8 @@ def catalog():
             return redirect('/favorites')
         elif buttonValue == "Catalog":
             return redirect('/catalog')
+
+        # if the sort by tag button is pressed
         elif buttonValue == "sort-tag":
             # gather markup and load page but SORTED BY TAG
             activeUser = session["user"]
@@ -128,11 +131,17 @@ def catalog():
             if session['sort'] == 'tag':
                 session['sort'] = 'regular'
                 infotable = tableMarkup(activeUser, 'regular')
+                tagIcon = "<i class='bi bi-dash-lg'></button></i>"
             else:
                 session['sort'] = 'tag'
                 infotable = tableMarkup(activeUser, 'tag')
+                tagIcon = "<i class='bi bi-arrow-up'></button></i>"
+
             modals = modalMarkup(activeUser, False)
-            return render_template('catalog.html', infotable=infotable, modals=modals)
+            dateIcon = "<i class='bi bi-arrow-up'></button></i>"
+            return render_template('catalog.html', infotable=infotable, modals=modals, dateIcon=dateIcon, tagIcon=tagIcon)
+
+        # if the sort by date button is pressed
         elif buttonValue == "sort-date":
             # gather markup and load page but SORTED BY DATE
             activeUser = session["user"]
@@ -140,11 +149,15 @@ def catalog():
             if session['sort'] == 'date':
                 session['sort'] = 'regular'
                 infotable = tableMarkup(activeUser, 'regular')
+                dateIcon = "<i class='bi bi-arrow-up'></button></i>"
             else:
                 session['sort'] = 'date'
                 infotable = tableMarkup(activeUser, 'date')
+                dateIcon = "<i class='bi bi-arrow-down'></button></i>"
             modals = modalMarkup(activeUser, False)
-            return render_template('catalog.html', infotable=infotable, modals=modals)
+            tagIcon = "<i class='bi bi-dash-lg'></button></i>"
+            return render_template('catalog.html', infotable=infotable, modals=modals, dateIcon=dateIcon, tagIcon=tagIcon)
+
         # if one of the favorite buttons is pressed
         else:
             entryID = int(buttonValue[1:])
@@ -164,13 +177,16 @@ def catalog():
             else:
                 deleteWriting(entryID)
                 return redirect('/catalog')
+
     else:
         session['sort'] = 'regular'
         # gather markup and load page
         activeUser = session["user"]
         infotable = tableMarkup(activeUser, 'regular')
         modals = modalMarkup(activeUser, False)
-        return render_template('catalog.html', infotable=infotable, modals=modals)
+        tagIcon = "<i class='bi bi-dash-lg'></button></i>"
+        dateIcon = "<i class='bi bi-arrow-up'></button></i>"
+        return render_template('catalog.html', infotable=infotable, modals=modals, dateIcon=dateIcon, tagIcon=tagIcon)
 
 
 # page to view saved favorites
