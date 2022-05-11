@@ -131,14 +131,14 @@ def catalog():
             if session['sort'] == 'tag':
                 session['sort'] = 'regular'
                 infotable = tableMarkup(activeUser, 'regular')
-                tagIcon = "<i class='bi bi-dash-lg'></button></i>"
+                tagIcon = Markup("<i class='bi bi-dash-lg'></button></i>")
             else:
                 session['sort'] = 'tag'
                 infotable = tableMarkup(activeUser, 'tag')
-                tagIcon = "<i class='bi bi-arrow-up'></button></i>"
+                tagIcon = Markup("<i class='bi bi-filter'></button></i>")
 
             modals = modalMarkup(activeUser, False)
-            dateIcon = "<i class='bi bi-arrow-up'></button></i>"
+            dateIcon = Markup("<i class='bi bi-arrow-up'></button></i>")
             return render_template('catalog.html', infotable=infotable, modals=modals, dateIcon=dateIcon, tagIcon=tagIcon)
 
         # if the sort by date button is pressed
@@ -149,13 +149,13 @@ def catalog():
             if session['sort'] == 'date':
                 session['sort'] = 'regular'
                 infotable = tableMarkup(activeUser, 'regular')
-                dateIcon = "<i class='bi bi-arrow-up'></button></i>"
+                dateIcon = Markup("<i class='bi bi-arrow-up'></button></i>")
             else:
                 session['sort'] = 'date'
                 infotable = tableMarkup(activeUser, 'date')
-                dateIcon = "<i class='bi bi-arrow-down'></button></i>"
+                dateIcon = Markup("<i class='bi bi-arrow-down'></button></i>")
             modals = modalMarkup(activeUser, False)
-            tagIcon = "<i class='bi bi-dash-lg'></button></i>"
+            tagIcon = Markup("<i class='bi bi-dash-lg'></button></i>")
             return render_template('catalog.html', infotable=infotable, modals=modals, dateIcon=dateIcon, tagIcon=tagIcon)
 
         # if one of the favorite buttons is pressed
@@ -184,8 +184,8 @@ def catalog():
         activeUser = session["user"]
         infotable = tableMarkup(activeUser, 'regular')
         modals = modalMarkup(activeUser, False)
-        tagIcon = "<i class='bi bi-dash-lg'></button></i>"
-        dateIcon = "<i class='bi bi-arrow-up'></button></i>"
+        tagIcon = Markup("<i class='bi bi-dash-lg'></button></i>")
+        dateIcon = Markup("<i class='bi bi-arrow-up'></button></i>")
         return render_template('catalog.html', infotable=infotable, modals=modals, dateIcon=dateIcon, tagIcon=tagIcon)
 
 
