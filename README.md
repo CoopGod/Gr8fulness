@@ -6,4 +6,4 @@ A flask application which seeks to make cataloging gratefulness **easy and priva
 
 This application was built using python's *Flask* library as a back-end, *HTML+CSS* with *Jinja* and a hint of JS for the front-end, and SQL's *SQLAlchemy* with *Postgres* as a database.
 
-You can access the website at this [link](https://grateful-deve.herokuapp.com/)
+You can access the website at this [link](https://gr8fulness.herokuapp.com/)
