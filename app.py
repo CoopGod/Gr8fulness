@@ -23,7 +23,7 @@ class writings(db.Model):
     grateful3 = db.Column(db.String)
     passage = db.Column(db.String)
     tag = db.Column(db.String)
-    user_ID = db.Column(db.Integer)
+    user_ID = db.Column(db.String)
 
     def __init__(self, date, g1, g2, g3, passage, tag, userID):
         self.date = date
